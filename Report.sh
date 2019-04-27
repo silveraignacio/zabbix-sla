@@ -24,6 +24,8 @@ Description:
 	    Set desired month to get SLA report. -- NOT IMPLEMENTED YET
 	  -id/--serviceid
 	    Set particular ID (just admit one)
+	  -s/--services
+	    Get list of configured services -- NOT IMPLEMENTED YET
 EOF
 }
 
@@ -76,6 +78,12 @@ main() {
 		          generateJson $2
 			  getSla
 		          ;;
+			-m|--month)
+			  echo "NOT IMPLEMENTED"
+			  ;;
+			-s|--services)
+			  echo "NOT IMPLEMENTED"
+			  ;;
 	        	*)
 			  help_message
 			  exit 1
