@@ -1,5 +1,6 @@
 #!/bin/bash
 
+#Main Variables
 API_PASS=
 ZABBIX_IP=
 
@@ -7,6 +8,24 @@ ZABBIX_IP=
 l_first_date=$(date -d "`date +%Y%m01` -1 month" +%s)
 #Get last day of past month
 l_last_date=$(date -d "`date +%Y%m01` -1 day" +%s)
+
+# Help message.
+help_message () { cat << EOF
+[ ERROR ] - Missig arguments
+Description:
+  Simple script that permits get day by day SLA result for specific service IDs. It will get all the data of the previous month. If you execute it 3rd May, it will get all the data from 1st April to 30th April day by day..
+  You have to set API_PASS and ZABBIX_IP variables to start using it. It has been tested on Zabbix 4.0.4
+  Syntax:
+	  ./$0 [-m month ] [-id serviceid ]
+  Options:
+	  -h/--help
+	    Display this help message.
+	  -m/--month
+	    Set desired month to get SLA report.
+	  -id/--serviceid
+	    Set particular ID (just admit one)
+EOF
+}
 
 getToken() {
 	token=$(curl -s -i -X POST -H 'Content-Type:application/json' -d'{"jsonrpc": "2.0","method":"user.login","params":{"user":"grafana","password":"'$API_PASS'"},"auth": null,"id":0}' http://'$ZABBIX_IP'/zabbix/api_jsonrpc.php | tail -1 | cut -f2 -d"," | cut -f2 -d":" | tr -d '"')
@@ -52,23 +71,28 @@ apiCall() {
 
 
 main() {
-	
-	case $1 in
-        	alta)
-	          serviceid=3
-	          ;;
-	        media)
-        	  serviceid=7
-	          ;;
-	        resumen)
-        	  serviceid=12
-	          ;;
-	        *)
-        	  echo "ERROR - Opciones válidas: alta, media o resumen"
-	          ;;
-	esac
-	getToken
-	generateJson $serviceid
-	apiCall
+	if [ $# -eq 0 ];then
+		help_message
+	else
+
+		case $1 in
+        		alta)
+		          serviceid=3
+		          ;;
+	        	media)
+	        	  serviceid=7
+		          ;;
+	        	resumen)
+	        	  serviceid=12
+		          ;;
+	        	*)
+	        	  echo "ERROR - Opciones válidas: alta, media o resumen"
+			  exit 1
+		          ;;
+		esac
+		getToken
+		generateJson $serviceid
+		apiCall
+	fi
 }
 main $@
