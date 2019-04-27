@@ -21,7 +21,7 @@ Description:
 	  -h/--help
 	    Display this help message.
 	  -m/--month
-	    Set desired month to get SLA report.
+	    Set desired month to get SLA report. -- NOT IMPLEMENTED YET
 	  -id/--serviceid
 	    Set particular ID (just admit one)
 EOF
@@ -64,35 +64,22 @@ generateJson() {
 		}" >> get_sla.json
 }
 
-apiCall() {
-	## LLAMADA A LA API
+getSla() {
 	curl -s -X POST -H 'Content-Type:application/json' -d@get_sla.json http://$ZABBIX_IP/zabbix/api_jsonrpc.php | jq '.result | .[].sla | .[].sla '
 }
 
 
 main() {
-	if [ $# -eq 0 ];then
-		help_message
-	else
-
 		case $1 in
-        		alta)
-		          serviceid=3
-		          ;;
-	        	media)
-	        	  serviceid=7
-		          ;;
-	        	resumen)
-	        	  serviceid=12
+        		-id|--serviceid)
+			  getToken
+		          generateJson $2
+			  getSla
 		          ;;
 	        	*)
-	        	  echo "ERROR - Opciones válidas: alta, media o resumen"
+			  help_message
 			  exit 1
 		          ;;
 		esac
-		getToken
-		generateJson $serviceid
-		apiCall
-	fi
 }
 main $@
