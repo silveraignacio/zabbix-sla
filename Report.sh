@@ -20,12 +20,12 @@ Description:
   Options:
 	  -h/--help
 	    Display this help message.
-	  -m/--month
-	    Set desired month to get SLA report. -- NOT IMPLEMENTED YET
+	  -m/--month <id>
+	    Get SLA for desired month. It's necesseary to put the service id -- NOT IMPLEMENTED YET
 	  -id/--serviceid
-	    Set particular ID (just admit one)
+	   Get SLA for particular ID (just admit one)
 	  -s/--services
-	    Get list of configured services -- NOT IMPLEMENTED YET
+	    Get list of configured services
 EOF
 }
 
