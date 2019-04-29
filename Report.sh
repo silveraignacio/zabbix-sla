@@ -20,12 +20,12 @@ Description:
   Options:
 	  -h/--help
 	    Display this help message.
-	  -m/--month
-	    Set desired month to get SLA report. -- NOT IMPLEMENTED YET
+	  -m/--month <id>
+	    Get SLA for desired month. It's necesseary to put the service id.
 	  -id/--serviceid
-	    Set particular ID (just admit one)
+	   Get SLA for particular ID (just admit one)
 	  -s/--services
-	    Get list of configured services -- NOT IMPLEMENTED YET
+	    Get list of configured services
 EOF
 }
 
@@ -85,6 +85,49 @@ getServices() {
 	curl -s -X POST -H 'Content-Type:application/json' -d@getServices.json http://"$ZABBIX_IP"/zabbix/api_jsonrpc.php | jq '.result | .[] | "\(.serviceid)       \(.name)"'
 }
 
+generateJsonMonth(){
+
+	month=$1	
+	#First day of input month
+	l_first_date=$(date -d "`date +%Y"$mes"01`" +%s)
+	#Next month
+	month=$(date -d "`date +%Y"$mes"01` +1 month" +%m)
+	#Last day of input month
+	l_last_date=$(date -d "`date +%Y"$mes"01` -1 day" +%s)
+
+	serviceid=$2
+        echo "{
+            \"jsonrpc\": \"2.0\",
+            \"method\": \"service.getsla\",
+            \"params\": {
+                \"serviceids\": \"$serviceid\",
+                \"intervals\": [" > get_sla.json
+        dia_sla=$l_first_date
+        while [ $dia_sla -le $l_last_date ]
+        do
+                if [ $dia_sla -lt $l_last_date ];then
+                        next_day=$(($dia_sla+86400))
+                        echo "   { 
+                        \"from\": $dia_sla,
+                        \"to\": $next_day 
+                        }," >> get_sla.json
+                else
+                        next_day=$(($dia_sla+86400))
+                        echo "   { 
+                        \"from\": $dia_sla,
+                        \"to\": $next_day 
+                        }" >> get_sla.json
+                fi
+                dia_sla=$(($dia_sla+86400))
+        done
+        echo "]
+            }," >> get_sla.json
+        echo "\"auth\": \"$token\",
+                \"id\":1
+                }" >> get_sla.json
+
+}
+
 main() {
 		case $1 in
         		-id|--serviceid)
@@ -93,7 +136,11 @@ main() {
 			  getSla
 		          ;;
 			-m|--month)
-			  echo "NOT IMPLEMENTED"
+		  	  month=$2
+			  serviceid=$3
+			  getToken
+			  generateJsonMonth $month $serviceid
+			  getSla
 			  ;;
 			-s|--services)
 			  getServices
