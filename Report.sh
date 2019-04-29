@@ -70,6 +70,20 @@ getSla() {
 	curl -s -X POST -H 'Content-Type:application/json' -d@get_sla.json http://$ZABBIX_IP/zabbix/api_jsonrpc.php | jq '.result | .[].sla | .[].sla '
 }
 
+getServices() {
+	echo '{
+    "jsonrpc": "2.0",
+    "method": "service.get",
+    "params": {
+        "output": "extend",
+        "selectDependencies": "extend"
+    },
+    "auth": "'$token'",
+    "id": 1
+}' > getServices.json
+	echo "ID       NAME"
+	curl -s -X POST -H 'Content-Type:application/json' -d@getServices.json http://"$ZABBIX_IP"/zabbix/api_jsonrpc.php | jq '.result | .[] | "\(.serviceid)       \(.name)"'
+}
 
 main() {
 		case $1 in
@@ -82,7 +96,7 @@ main() {
 			  echo "NOT IMPLEMENTED"
 			  ;;
 			-s|--services)
-			  echo "NOT IMPLEMENTED"
+			  getServices
 			  ;;
 	        	*)
 			  help_message
