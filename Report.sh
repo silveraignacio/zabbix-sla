@@ -4,11 +4,6 @@
 API_PASS=
 ZABBIX_IP=
 
-#Get first day of past month
-l_first_date=$(date -d "`date +%Y%m01` -1 month" +%s)
-#Get last day of past month
-l_last_date=$(date -d "`date +%Y%m01` -1 day" +%s)
-
 # Help message.
 help_message () { cat << EOF
 [ ERROR ] - Missig arguments
@@ -34,6 +29,11 @@ getToken() {
 }
 
 generateJson() {
+	#Get first day of past month
+	l_first_date=$(date -d "`date +%Y%m01` -1 month" +%s)
+	#Get last day of past month
+	l_last_date=$(date -d "`date +%Y%m01` -1 day" +%s)
+
 	serviceid=$1
 	echo "{
 	    \"jsonrpc\": \"2.0\",
