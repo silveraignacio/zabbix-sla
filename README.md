@@ -8,7 +8,7 @@ For the first use, you have to set ZABBIX_IP variable and API_PASSWORD variable 
 
 Ex:
 ```
-user@host$ Report.sh alta
+user@host$ Report.sh -id 10
 
 100
 100
