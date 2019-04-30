@@ -44,5 +44,4 @@ user@host$ Report.sh -id 10
 ```
 
 # To Do
- - Flexibility to choose Service
- - Possibility to add several services
+Better documentation
