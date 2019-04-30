@@ -106,39 +106,39 @@ generateJsonMonth(){
 		serviceid=$2
 
 		if isDigit "$serviceid";then
-    	    echo "{
-        	    \"jsonrpc\": \"2.0\",
-            	\"method\": \"service.getsla\",
-            	\"params\": {
-                	\"serviceids\": \"$serviceid\",
-                	\"intervals\": [" > get_sla.json
-        	dia_sla=$l_first_date
-        	while [ $dia_sla -le $l_last_date ]
-        	do
-                if [ $dia_sla -lt $l_last_date ];then
-                        next_day=$(($dia_sla+86400))
-                        echo "   { 
-                        \"from\": $dia_sla,
-                        \"to\": $next_day 
-                        }," >> get_sla.json
-                else
-                        next_day=$(($dia_sla+86400))
-                        echo "   { 
-                        \"from\": $dia_sla,
-                        \"to\": $next_day 
-                        }" >> get_sla.json
-                fi
-            	dia_sla=$(($dia_sla+86400))
-        	done
-        	echo "]
-            	}," >> get_sla.json
-        	echo "\"auth\": \"$token\",
-                \"id\":1
-                }" >> get_sla.json
-        else
-        	echo "ERROR: ServiceID is not a numeric type."
-        	exit 1
-        fi
+    	    		echo "{
+        	    	\"jsonrpc\": \"2.0\",
+            		\"method\": \"service.getsla\",
+            		\"params\": {
+                		\"serviceids\": \"$serviceid\",
+                		\"intervals\": [" > get_sla.json
+        		dia_sla=$l_first_date
+        		while [ $dia_sla -le $l_last_date ]
+        		do
+                	if [ $dia_sla -lt $l_last_date ];then
+                        	next_day=$(($dia_sla+86400))
+	                        echo "   { 
+        	                \"from\": $dia_sla,
+                	        \"to\": $next_day 
+                        	}," >> get_sla.json
+	                else
+        	                next_day=$(($dia_sla+86400))
+                	        echo "   { 
+                        	\"from\": $dia_sla,
+	                        \"to\": $next_day 
+        	                }" >> get_sla.json
+                	fi
+	            	dia_sla=$(($dia_sla+86400))
+        		done
+        		echo "]
+	            	}," >> get_sla.json
+        		echo "\"auth\": \"$token\",
+                	\"id\":1
+	                }" >> get_sla.json
+        	else
+        		echo "ERROR: ServiceID is not a numeric type."
+        		exit 1
+	        fi
 	else
 		echo "ERROR: Wrong month input. It must have 2 numbers.(Ex: 04)"
 		exit 2
