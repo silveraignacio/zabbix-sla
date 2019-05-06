@@ -2,7 +2,7 @@
 		    "jsonrpc": "2.0",
 		    "method": "service.getsla",
 	    	"params": {
-		        "serviceids": "1",
+		        "serviceids": "20",
 		        "intervals": [
    { 
 				"from": 1554087600,
@@ -126,6 +126,6 @@
 	                	}
 ]
 	    	},
-"auth": "",
+"auth": "9d96415472e357e3ba074c391e240ff4",
 			"id":1
 			}

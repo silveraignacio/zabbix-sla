@@ -1,12 +1,13 @@
 #!/bin/bash
 
 #Main Variables
-API_PASS=
-ZABBIX_IP=
+API_USER=grafana
+API_PASS=Password33
+ZABBIX_IP=10.64.37.41
 
 #Check if variables were set
-if [ -z "$API_PASS" ] || [ -z "$ZABBIX_IP" ];then
-	echo "ERROR: You must set variables API_PASS and ZABBIX_IP on the script"
+if [ -z "$API_PASS" ] || [ -z "$ZABBIX_IP" ] || [ -z "$API_USER" ];then
+	echo "ERROR: You must set variables API_PASS, API_USER and ZABBIX_IP on the script"
 	exit 2
 fi
 
@@ -31,7 +32,7 @@ EOF
 }
 
 getToken() {
-	token=$(curl -s -i -X POST -H 'Content-Type:application/json' -d'{"jsonrpc": "2.0","method":"user.login","params":{"user":"grafana","password":"'$API_PASS'"},"auth": null,"id":0}' http://"$ZABBIX_IP"/zabbix/api_jsonrpc.php | tail -1 | cut -f2 -d"," | cut -f2 -d":" | tr -d '"')
+	token=$(curl -s -i -X POST -H 'Content-Type:application/json' -d'{"jsonrpc": "2.0","method":"user.login","params":{"user":"'$API_USER'","password":"'$API_PASS'"},"auth": null,"id":0}' http://"$ZABBIX_IP"/zabbix/api_jsonrpc.php | tail -1 | cut -f2 -d"," | cut -f2 -d":" | tr -d '"')
 }
 
 generateJson() {
