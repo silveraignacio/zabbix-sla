@@ -4,14 +4,20 @@
 API_PASS=
 ZABBIX_IP=
 
+#Check if variables were set
+if [ -z "$API_PASS" ] || [ -z "$ZABBIX_IP" ];then
+	echo "ERROR: You must set variables API_PASS and ZABBIX_IP on the script"
+	exit 2
+fi
+
 # Help message.
 help_message () { cat << EOF
-[ ERROR ] - Missig arguments
+USAGE
 Description:
-  Simple script that permits get day by day SLA result for specific service IDs. It will get all the data of the previous month. If you execute it 3rd May, it will get all the data from 1st April to 30th April day by day..
+  Script that permits get day by day SLA result for specific service IDs.
   You have to set API_PASS and ZABBIX_IP variables to start using it. It has been tested on Zabbix 4.0.4
   Syntax:
-	  ./$0 [-m month ] [-id serviceid ]
+	  $0 [-m month ] [-id serviceid ]
   Options:
 	  -h/--help
 	    Display this help message.
