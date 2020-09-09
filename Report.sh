@@ -2,8 +2,8 @@
 
 #Main Variables
 API_USER=grafana
-API_PASS=Password33
-ZABBIX_IP=10.64.37.41
+API_PASS=grafana
+ZABBIX_IP=1.1.1.1
 
 #Check if variables were set
 if [ -z "$API_PASS" ] || [ -z "$ZABBIX_IP" ] || [ -z "$API_USER" ];then
